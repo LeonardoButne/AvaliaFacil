@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .action-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .action-buttons button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .action-buttons button.delete-button {
+        background-color: #d9534f;
+        color: #fff;
+    }
+
+    .action-buttons button.suspend-button {
+        background-color: #f0ad4e;
+        color: #fff;
+    }
+
+    .action-buttons button.edit-button {
+        background-color: #5bc0de;
+        color: #fff;
+    }
+    </style>    
+    
+</head>
+
+<body>
+    <h1>Dados do Consumidor</h1>
+    <div id="consumerDetails"></div>
+
+    <h2>Comentários do Consumidor</h2>
+    <ul id="commentsList"></ul>
+
+    <div class="action-buttons">
+        <button class="delete-button" onclick="deleteConsumidor()">Apagar Conta</button>
+        <button class="suspend-button" onclick="suspendConsumidor()">Suspender por Tempo</button>
+    </div>
+</body>
+<script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyA5W3WDwlAgF8Qn5ptmZ4V4JvVaHQ5KBEk",
+    authDomain: "feedback-aqui.firebaseapp.com",
+    databaseURL: "https://feedback-aqui-default-rtdb.firebaseio.com",
+    projectId: "feedback-aqui",
+    storageBucket: "feedback-aqui.appspot.com",
+    messagingSenderId: "390730068105",
+    appId: "1:390730068105:web:4f9c564b63192d6ddc5658",
+    measurementId: "G-4V5LL17MRE"
+  };
+
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+    const feedbackAquiDB2 = firebase.database().ref("feedbackAqui");
+    const consumerId = getParameterByName('consumerId');
+    console.log(consumerId);
+
+function obterDetalhesConsumidor() {
+    const consumerDetailsContainer = document.getElementById("consumerDetails");
+    const commentsListContainer = document.getElementById("commentsList");
+
+    // Obter detalhes do consumidor
+    feedbackAquiDB2.child("consumidores").child(consumerId).once("value")
+        .then((consumerSnapshot) => {
+            const consumerData = consumerSnapshot.val();
+
+            const biConsumidor = consumerData.bi || "bi não encontrado";
+            const nomeConsumidor = consumerData.nome || "Nome não encontrado";
+            const emailConsumidor = consumerData.email || "Email não encontrado";
+            const provinciaConsumidor = consumerData.provincia || "provincia não encontrado";
+            const cidadeConsumidor = consumerData.cidade || "cidade não encontrado";
+            const dataNascimentoConsumidor = consumerData.dataNascimento || "dataNascimento não encontrado";
+            const celularConsumidor = consumerData.celular || "celular não encontrado";
+
+
+            // Exibir detalhes do consumidor
+            const consumerDetailsHTML = `
+                <p><strong>BI:</strong> ${biConsumidor}</p>
+                <p><strong>Nome:</strong> ${nomeConsumidor}</p>
+                <p><strong>Email:</strong> ${emailConsumidor}</p>
+                <p><strong>Provinvia:</strong> ${provinciaConsumidor}</p>
+                <p><strong>Cidade:</strong> ${cidadeConsumidor}</p>
+                <p><strong>Data de nascimento:</strong> ${dataNascimentoConsumidor}</p>
+                <p><strong>Celular:</strong> ${celularConsumidor}</p>
+            `;
+            consumerDetailsContainer.innerHTML = consumerDetailsHTML;
+            obterEExibirAvaliacoes();
+        })
+        .catch((error) => {
+            console.error("Erro ao obter detalhes do consumidor: " + error);
+            // Tratar o erro conforme necessário
+        });
+
+}
+
+// Obter comentários associados ao consumidor
+
+function obterEExibirAvaliacoes() {
+    // Referência ao nó de avaliações
+    const avaliacoesRef = feedbackAquiDB2.child("avaliacoes");
+    const consumerId = getParameterByName('consumerId');
+    console.log("Duas vezes" + consumerId);
+
+    // Consulta para obter as avaliações específicas para o consumidor
+    avaliacoesRef.orderByChild("userId").equalTo(consumerId).on("value", (snapshot) => {
+        const avaliacoes = [];
+        const comentariosPromises = [];
+
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+            avaliacoes.push(data.starRating);
+
+            const userPromise = Promise.resolve({ nome: data.comment }); // Use a propriedade correta para o nome
+
+            comentariosPromises.push(userPromise);
+        });
+
+        // Espera que todas as promessas sejam resolvidas antes de prosseguir
+        Promise.all(comentariosPromises)
+            .then((comentarios) => {
+                console.log("Avaliações encontradas:", avaliacoes);
+                exibirComentarios(comentarios);
+            })
+            .catch((error) => {
+                console.error("Erro ao obter dados do usuário: " + error);
+            });
+    }, (error) => {
+        console.error("Erro ao obter as avaliações: " + error);
+    });
+}
+
+// Restante do código permanece o mesmo...
+
+
+function exibirComentarios(comentarios) {
+    const commentsList = document.getElementById("commentsList");
+
+    // Limpar a lista de comentários antes de adicionar os novos
+    commentsList.innerHTML = "";
+    comentarios.forEach((comentario) => {
+        const listItem = document.createElement("li");
+
+        const nameElement = document.createElement("strong");
+        nameElement.textContent = comentario.nome;
+
+        // Supondo que a avaliação tenha uma propriedade 'comentario'
+        const commentElement = document.createElement("p");
+        // commentElement.textContent = comentario.comentario || "Comentário não encontrado";
+
+        listItem.appendChild(nameElement);
+        listItem.appendChild(commentElement);
+
+        commentsList.appendChild(listItem);
+    });
+}
+ 
+
+
+// Execute a função quando a página carregar
+window.onload = obterDetalhesConsumidor;
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+        var results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function suspendConsumidor(){
+ // Lógica para suspender o e-commerce por um tempo
+ console.log('E-commerce suspenso por tempo');
+
+        // Pergunta ao usuário se ele realmente deseja suspender o e-commerce
+        const confirmSuspend = confirm("Tem certeza de que deseja suspender este consumidor?");
+
+        if (confirmSuspend) {
+        // Se o usuário confirmar, execute a suspensão
+
+        // obter o ID do consumidor
+        const consumerId = getParameterByName('consumerId');
+
+        console.log(consumerId);
+
+        const consumidoreRef = feedbackAquiDB2.child("consumidores").child(consumerId);
+
+        // Atualize o valor do campo "suspended" para true
+        consumidoreRef.update({ isSuspended: true })
+        .then(() => {
+        alert("Consumidor suspenso com sucesso!");
+        window.location.reload(); // Recarregue a página para refletir as alterações
+        })
+        .catch((error) => {
+        console.error("Erro ao suspender Consumidor: ", error);
+        alert("Erro ao suspender o consumidor. Por favor, tente novamente mais tarde.");
+        });
+        }
+
+    }
+    function deleteConsumidor(){
+ // Lógica para suspender o e-commerce por um tempo
+    console.log('Consumidor eliminado');
+
+        // Pergunta ao usuário se ele realmente deseja suspender o e-commerce
+        const confirmEliminacao = confirm("Tem certeza de que deseja eleminar este consumidor?");
+
+        if (confirmEliminacao) {
+        // Se o usuário confirmar, execute a eliminacao
+
+        // obter o ID do consumidor
+        const consumerId = getParameterByName('consumerId');
+
+        console.log(consumerId);
+
+        const consumidoreRef = feedbackAquiDB2.child("consumidores").child(consumerId);
+
+        // Atualize o valor do campo "suspended" para true
+        consumidoreRef.update({ isRemoved: true })
+        .then(() => {
+        alert("Consumidor eliminado com sucesso!");
+        window.location.reload(); // Recarregue a página para refletir as alterações
+        })
+        .catch((error) => {
+        console.error("Erro ao eliminar o Consumidor: ", error);
+        alert("Erro ao eliminar o consumidor. Por favor, tente novamente mais tarde.");
+        });
+        }
+
+    }
+</script>
+</html>

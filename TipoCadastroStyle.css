@@ -1,0 +1,95 @@
+body {
+    background-color: #d1f9d1; /* ou outra tonalidade de verde suave */
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+center {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.titulo-1 {
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.titulo-2,
+.titulo-3 {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+}
+
+.cards {
+    display: flex;
+    justify-content: center; /* Espaçamento entre os cards */
+    margin-top: 20px;
+}
+
+.container_user,
+.container_ecommerce  {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    margin: 20px;
+    text-align: center;
+    border: 1px solid #000000; /* Adicionado para a borda fina */
+
+}
+
+.container_user:hover,
+.container_ecommerce:hover {
+    transform: scale(1.05);
+}
+
+.container_user_img,
+.container_ecommerce_img {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.container_user_img img,
+.container_ecommerce_img img {
+    max-width: 100%;
+    height: auto;
+}
+
+h1 {
+    color: #000000;
+    font-size: 19px;
+    margin: 10px 0;
+}
+
+.container_user_txt,
+.container_ecommerce_txt {
+    color: #000000;
+    font-size: 14px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.btn_cadastrar_user, 
+.btn_cadastrar_ecommerce {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.btn_cadastrar_user:hover,
+.btn_cadastrar_ecommerce:hover {
+    background-color: #45a049;
+}

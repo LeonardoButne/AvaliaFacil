@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do E-commerce</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- <script type="module" src="firebaseInicializar.js"></script> -->
+    <script type="module" src="firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
+    <style>
+body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #profileDetails {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        #ratingForm {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #ratingForm h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        #ratingForm label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #555;
+        }
+
+        #starRating {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        #comment {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        #submitRating {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        #submitRating:hover {
+            background-color: #0056b3;
+        }
+
+        .avaliacao {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .star-icon {
+            list-style-type: none;
+            border: 1px solid #fff;
+            cursor: pointer;
+            color: #ffe500;
+            font-size: 40px;
+            margin: 0 5px;
+        }
+
+        .star-icon::before {
+            content: "\2605";
+        }
+
+        .star-icon.ativo ~ .star-icon::before {
+            content: "\2606";
+        }
+
+        .avaliacao:hover .star-icon::before {
+            content: "\2605";
+        }
+
+        .star-icon:hover ~ .star-icon::before {
+            content: "\2606";
+        }
+
+        #comments-container {
+    max-height: 300px; /* Defina a altura máxima desejada */
+    overflow-y: auto; /* Adicione a rolagem vertical */
+}
+
+#comments {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#comments li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#comments li:last-child {
+    border-bottom: none; /* Remove a borda inferior do último item */
+}
+
+#comments li strong {
+    font-weight: bold;
+    color: #007BFF; /* Cor para o nome do usuário */
+}
+
+#comments li p {
+    margin: 0;
+}
+
+#comments li p.comment {
+    color: #333;
+}
+
+#comments li:hover {
+    background-color: #f4f4f4; /* Adiciona um efeito de destaque ao passar o mouse */
+}
+#progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            margin-top: 10px;
+            display: none; /* Começa escondido */
+            overflow: hidden; /* Oculta o overflow para que a animação não ultrapasse a barra */
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 50%;
+            background-color: #4caf50;
+            transition: width 0.5s ease; /* Adiciona uma transição suave na largura */
+        }
+
+    </style>
+
+
+    <!-- Adicione seu CSS para estilizar a página de perfil aqui -->
+</head>
+<body>
+    <h1>Perfil do E-commerce</h1>
+    <div class="container">
+        <div id="progress-bar-container">
+            <div id="progress-bar">
+        </div>
+    </div>
+    <div id="profileDetails">
+        <!-- Os detalhes do E-commerce serão inseridos aqui -->
+    </div>
+
+    <div id="profileDetails">
+        <p><strong>Média de Avaliações:</strong> <span id="mediaAvaliacoes"></span></p>
+    </div>
+
+    <div id="profileDetails">
+        <h2>O que tem falado sobre <span id="nomeEcommerce"></span></h2>
+        <div id="comments-container">
+            <ul id="comments"></ul>
+        </div>
+    </div>
+
+<!-- Adicione campos de classificação de estrelas e comentários -->
+<div id="ratingForm">
+    <h2>Deixe sua avaliação</h2>
+
+    
+        <div class="avaliacao-center">
+        <ul class="avaliacao">
+            <li class="star-icon ativo" data-avaliacao="1"></li>
+            <li class="star-icon" data-avaliacao="2"></li>
+            <li class="star-icon" data-avaliacao="3"></li>
+            <li class="star-icon" data-avaliacao="4"></li>
+            <li class="star-icon" data-avaliacao="5"></li>
+          </ul>
+        </div>
+    <div>
+        <label for="comment">Comentário:</label>
+        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+    </div>
+    <div>
+        <button id="submitRating">Enviar Avaliação</button>
+    </div>
+</div>
+
+
+
+
+    <script>
+        // import { db } from './firebaseInicializar';
+        // Configure o Firebase com sua configuração
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5W3WDwlAgF8Qn5ptmZ4V4JvVaHQ5KBEk",
+            authDomain: "feedback-aqui.firebaseapp.com",
+            databaseURL: "https://feedback-aqui-default-rtdb.firebaseio.com",
+            projectId: "feedback-aqui",
+            storageBucket: "feedback-aqui.appspot.com",
+            messagingSenderId: "390730068105",
+            appId: "1:390730068105:web:4f9c564b63192d6ddc5658",
+            measurementId: "G-4V5LL17MRE"
+        };
+
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referencie o banco de dados em tempo real
+        const feedbackAquiDB2 = firebase.database().ref("feedbackAqui");
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const ecommerceName = urlParams.get("name"); // Obtém o nome do E-commerce da URL
+
+        const profileDetailsContainer = document.getElementById("profileDetails");
+
+        var ecommerceId;
+        $("#progress-bar-container").show();
+        // Realize a consulta para obter os detalhes do E-commerce com base no nome
+        feedbackAquiDB2.child("ecommerces").orderByChild("ecommerce_name").equalTo(ecommerceName).on("value", (snapshot) => {
+            
+
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+
+                ecommerceId = childSnapshot.key;  // o ID do E-commerce
+                console.log("ID do e-commerce: " + ecommerceId);
+
+                $("#progress-bar").css("width", "100%");
+
+            // Esconde a barra de progresso após um breve atraso (por exemplo, 500ms)
+            setTimeout(() => {
+                $("#progress-bar-container").hide();
+            }, 500);
+
+                if (data.ecommerce_name) {
+                    // Preencha a página de perfil com os detalhes do E-commerce
+
+                    const nomeEcommerce = document.getElementById("nomeEcommerce");
+        
+                    // Atualize o conteúdo do elemento span com a média
+                    nomeEcommerce.textContent = data.ecommerce_name;
+
+                    
+                    profileDetailsContainer.innerHTML = `
+                        <h2>${data.ecommerce_name}</h2>
+                        <p><strong>Categoria:</strong> ${data.category}</p>
+                        <p><strong>Website:</strong> ${data.website}</p>
+                        <p><strong>Província:</strong> ${data.provinceSelect}</p>
+                        <p><strong>Cidade:</strong> ${data.citySelect}</p>
+                        <p><strong>Telefone:</strong> ${data.phone}</p>
+                        <p><strong>Email de Contato:</strong> ${data.contact_email}</p>
+                        <p><strong>Representante Legal:</strong> ${data.legal_representative}</p>
+                        <p><strong>Data de Fundação:</strong> ${data.foundation_date}</p>
+                    `;
+                }
+                obterEExibirAvaliacoes();
+            });
+        }, (error) => {
+            $("#progress-bar-container").hide();
+            console.error("Erro ao obter os dados do Realtime Database: " + error);
+        });
+
+        var stars = document.querySelectorAll('.star-icon');
+        var numeroDeEstrlas;
+                  
+        document.addEventListener('click', function(e){
+            var classStar = e.target.classList;
+            if(!classStar.contains('ativo')){
+                stars.forEach(function(star){
+                star.classList.remove('ativo');
+                });
+                classStar.add('ativo');
+               console.log(e.target.getAttribute('data-avaliacao'));
+               numeroDeEstrlas = e.target.getAttribute('data-avaliacao');
+
+
+
+
+               
+            }
+        });
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                const userId = user.uid;  // Obtém o ID do usuário autenticado
+
+                // Restante do seu código aqui...
+                console.log("ID do cliente: " + userId);
+
+               
+                // Adicione o ID do usuário na página de perfil se necessário
+                // profileDetailsContainer.innerHTML += `<p><strong>ID do Usuário:</strong> ${userId}</p>`;
+            } else {
+                // O usuário não está autenticado
+                console.log("Usuário não autenticado");
+            }
+        });
+
+        const submitRatingButton = document.getElementById("submitRating");
+
+submitRatingButton.addEventListener("click", () => {
+    const starRating = numeroDeEstrlas;
+    const comment = document.getElementById("comment").value;
+
+    if (starRating !== null && comment.trim() !== "") {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                const userId = user.uid;
+
+                // Agora, busca o nome do usuário na child "consumidores" usando o userId
+                feedbackAquiDB2.child("consumidores").child(userId).once("value")
+                    .then((snapshot) => {
+                        const userData = snapshot.val();
+                        const userName = userData.nome; // Aqui, obtenha o campo correto que contém o nome
+
+                        // Adiciona os dados da avaliação ao Realtime Database
+                        const feedbackData = {
+                            ecommerceId: ecommerceId,
+                            userId: userId,
+                            userName: userName,
+                            starRating: starRating,
+                            comment: comment
+                        };
+
+                        // Use push para adicionar uma nova avaliação ao nó "avaliacoes"
+                        // Certifique-se de associar a avaliação ao E-commerce correto
+                        const newFeedbackRef = feedbackAquiDB2.child("avaliacoes").push();
+                        newFeedbackRef.set(feedbackData);
+
+                        // Limpe os campos após o envio da avaliação
+                        document.getElementById("comment").value = "";
+
+                        // Adicione uma mensagem de confirmação se desejar
+                        alert("Avaliação enviada com sucesso!");
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao buscar dados do usuário: " + error);
+                    });
+            } else {
+                // O usuário não está autenticado
+                console.log("Usuário não autenticado");
+            }
+        });
+    } else {
+        alert("Por favor, selecione uma classificação antes de enviar.");
+    }
+});
+
+function obterEExibirAvaliacoes() {
+    // Referência ao nó de avaliações
+    const avaliacoesRef = feedbackAquiDB2.child("avaliacoes");
+
+    // Consulta para obter as avaliações específicas para o e-commerce
+    avaliacoesRef.orderByChild("ecommerceId").equalTo(ecommerceId).on("value", (snapshot) => {
+        const avaliacoes = [];
+        const comentariosPromises = [];
+
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+            avaliacoes.push(data.starRating);
+
+            // Obtém o nome do usuário associado ao ID
+            const userId = data.userId;
+            console.log("Obtém o nome do usuário associado ao ID " + userId);
+            const userPromise = feedbackAquiDB2.child("consumidores").child(userId).once("value")
+                .then((userSnapshot) => {
+                    const userData = userSnapshot.val();
+                    const nomeUsuario = userData.nome || "Nome não encontrado"; // Substitua "nome" pelo campo correto
+                    return { comentario: data.comment, nome: nomeUsuario };
+                })
+                .catch((error) => {
+                    console.error("Erro ao obter dados do usuário: " + error);
+                    return { comentario: data.comment, nome: "Erro ao obter nome do usuário" };
+                });
+
+            comentariosPromises.push(userPromise);
+        });
+
+        // Espera que todas as promessas sejam resolvidas antes de prosseguir
+        Promise.all(comentariosPromises)
+            .then((comentarios) => {
+                console.log("Avaliações encontradas:", avaliacoes);
+
+                // Calcular a média
+                const media = calcularMedia(avaliacoes);
+
+                // Exibir a média no perfil do e-commerce
+                exibirMediaNoPerfil(media);
+
+                exibirComentarios(comentarios);
+
+                console.log("Media = " + media);
+            })
+            .catch((error) => {
+                console.error("Erro ao obter dados do usuário: " + error);
+            });
+    }, (error) => {
+        console.error("Erro ao obter as avaliações: " + error);
+    });
+}
+
+
+  
+    // Função para calcular a média
+    function calcularMedia(avaliacoes) {
+    if (avaliacoes.length === 0) {
+        return 0; // Não há avaliações, média é 0
+    }
+
+    let total = 0;
+
+    for (let i = 0; i < avaliacoes.length; i++) {
+        total += parseInt(avaliacoes[i]); // Convertendo para número antes de somar
+        // Se houver mais dados na avaliação, adicione-os aqui
+    }
+
+    const media = total / avaliacoes.length;
+
+    return media;
+}
+
+    function exibirMediaNoPerfil(media) {
+        const mediaAvaliacoesSpan = document.getElementById("mediaAvaliacoes");
+        
+        // Atualize o conteúdo do elemento span com a média
+        mediaAvaliacoesSpan.textContent = media.toFixed(1);
+    }
+
+    function exibirComentarios(comentarios) {
+    const commentsList = document.getElementById("comments");
+
+    // Limpar a lista de comentários antes de adicionar os novos
+    commentsList.innerHTML = "";
+    comentarios.forEach((comentario) => {
+        const listItem = document.createElement("li");
+
+        const nameElement = document.createElement("strong");
+        nameElement.textContent = comentario.nome;
+
+        const commentElement = document.createElement("p");
+        commentElement.textContent = comentario.comentario;
+
+        listItem.appendChild(nameElement);
+        listItem.appendChild(commentElement);
+
+        commentsList.appendChild(listItem);
+    });
+}
+    </script>
+</body>
+</html>

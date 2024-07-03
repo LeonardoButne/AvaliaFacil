@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Feedback AQUI - Pesquise antes de comprar. Reclame. Resolva</title>
+    <link href="TipoCadastroStyle.css" rel="stylesheet">
+</head>
+
+<body bgcolor="#a1a1a1">
+
+    <center>
+        <p class="titulo-1"><strong>Olá, crie uma conta no Feedback AQUI</strong></p>
+        <p class="titulo-2">Navegue e ajude outros consumidores.</p>
+        <p class="titulo-3">Apos o login conseguimos oferecer um serviço melhor e mais personalizado.</p>
+    </center>
+
+
+    <div class="cards">
+
+        <div class="container_user">
+
+            <div class="container_user_img">
+                <img src="user-interface.png" alt="Ícone do e-commerce">
+            </div>
+
+            <div class="container_user_title">
+                <h1>Cadastrar-me como consumidor</h1>
+            </div>
+
+            <div class="container_user_btn">
+                <button class="btn_cadastrar_user" onclick="abrirCadastroConsumidor()"><span>Registar-se</span></button>
+            </div>
+
+        </div>
+
+        <div class="container_ecommerce">
+
+            <div class="container_ecommerce_img">
+                <img src="e-commerce.png" alt="Ícone do e-commerce">   
+            </div>
+
+            <div class="container_ecommerce_title">
+                <h1>Cadastrar-me como e-commerce</h1>
+            </div>
+
+            <div class="container_ecommerce_btn">
+                <button class="btn_cadastrar_ecommerce" onclick="abrirCadastroEcommerce()"><span>Registar-se</span></button>
+            </div>
+        </div>
+    </div>
+    <body>
+
+        <script>
+            function abrirCadastroConsumidor(){
+                window.location.href = "CadastroConsumidor.html";
+            }
+
+            function abrirCadastroEcommerce(){
+                window.location.href = "CadastroEcommerce.html";
+            }
+        </script>
+
+</html>

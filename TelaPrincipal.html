@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
+    <title>Dados de E-commerces</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .card {
+            padding: 0.5rem;
+            margin: 2rem;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: inline-block;
+            width: calc(25% - 20px);
+        }
+
+        .card img {
+            width: 120px;
+            height: 150px;
+            border-radius: 1rem;
+        }
+
+        .card h2 {
+            padding: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .card p {
+            width: 20rem;
+            text-align: left;
+            padding: 0.5rem;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+    .card {
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        /* max-width: 300px; */
+        max-width: 250px;
+        max-height: 300px;
+        
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        width: 40%;
+        height: auto;
+        border-radius: 8px;
+        /* margin-bottom: 5px; */
+    }
+
+    .card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+
+    .card p {
+        font-size: 1rem;
+        color: #555;
+        /* margin-bottom: 5px; */
+    }
+
+    .button {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+
+        /* Adicione seu CSS para estilizar os cartões aqui */
+        /* Estilize os cartões */
+        .content{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .card-content {
+            font-size: 1.5vw; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+
+        /* Estilize o botão "Ver perfil" */
+        .card button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: auto; /* Centralize vertical e horizontalmente */
+        }
+
+        .card button:hover {
+            background-color: #0056b3;
+        }
+        .suspensa-text {
+            color: #FF0000; /* Cor vermelha para o texto "SUSPENSO" */
+        }
+
+        #progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #bcbcbc;
+            margin-top: 10px;
+            display: none; /* Começa escondido */
+            overflow: hidden; /* Oculta o overflow para que a animação não ultrapasse a barra */
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 10%;
+            background-color: #4caf50;
+            transition: width 0.5s ease; /* Adiciona uma transição suave na largura */
+        }
+    </style>
+</head>
+<body>
+    
+    <center>
+    <h1>Lista de E-commerces que pode consultar ou fazer Avaliacoes</h1>
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div id="ecommerceCards" class="cards-container">
+        <div id="ecommerceCards">
+            <!-- Os cartões serão inseridos aqui -->
+        </div>
+    </div>
+    </center>
+
+    <script>
+         const firebaseConfig = {
+            apiKey: "AIzaSyA5W3WDwlAgF8Qn5ptmZ4V4JvVaHQ5KBEk",
+            authDomain: "feedback-aqui.firebaseapp.com",
+            databaseURL: "https://feedback-aqui-default-rtdb.firebaseio.com",
+            projectId: "feedback-aqui",
+            storageBucket: "feedback-aqui.appspot.com",
+            messagingSenderId: "390730068105",
+            appId: "1:390730068105:web:4f9c564b63192d6ddc5658",
+            measurementId: "G-4V5LL17MRE"
+        };
+
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referencie o banco de dados em tempo real
+        const feedbackAquiDB2 = firebase.database().ref("feedbackAqui");
+
+        const ecommerceCardsContainer = document.getElementById("ecommerceCards");
+        $("#progress-bar-container").show();
+
+        feedbackAquiDB2.child("ecommerces").on("value", (snapshot) => {
+            ecommerceCardsContainer.innerHTML = ''; // Limpar cartões existentes
+            
+
+
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+
+                $("#progress-bar").css("width", "100%");
+
+                // Esconde a barra de progresso após um breve atraso (por exemplo, 500ms)
+                setTimeout(() => {
+                    $("#progress-bar-container").hide();
+                }, 500);
+
+                if (data.category) {
+                    const ecommerce_name = data.ecommerce_name;
+                    const category = data.category;
+                    const website = data.website;
+                    const provinceSelect = data.provinceSelect;
+                    const citySelect = data.citySelect;
+                    const phone = data.phone;
+                    const contact_email = data.contact_email;
+                    const legal_representative = data.legal_representative;
+                    const foundation_date = data.foundation_date;
+                    const status = data.suspended; 
+
+                    if (status === false) {
+                    // Crie um elemento de cartão
+                    const card = document.createElement("div");
+                    card.classList.add("card");
+                    card.innerHTML = `
+                        <img src="FotoCards.png" alt="imagem do card">
+                        <h2>${ecommerce_name}</h2>
+                        <p><strong>Categoria:</strong> ${category}</p>
+                        <p><strong>Cidade:</strong> ${citySelect}</p>
+                        <button class="view-profile-button">Ver perfil</button>
+                    `;
+
+                    // Adicione um manipulador de eventos ao botão "Ver perfil"
+                    const viewProfileButton = card.querySelector(".view-profile-button");
+                    viewProfileButton.addEventListener("click", () => {
+                        // Implemente a ação desejada ao clicar no botão "Ver perfil" (por exemplo, redirecionar para a página de perfil)
+                        window.location.href = `PerfilEcommerce.html?name=${encodeURIComponent(ecommerce_name)}`;
+                        console.log(ecommerce_name);
+                    });
+
+                    ecommerceCardsContainer.appendChild(card);
+                    
+                    }else{
+                    
+                    //elemento de cartão
+                    const card = document.createElement("div");
+                    card.classList.add("card");
+                    card.classList.add("suspensa");
+                    card.innerHTML = `
+                        <img src="FotoCards.png" alt="imagem do card">
+                        <h2>${ecommerce_name}</h2>
+                        <p><strong>Categoria:</strong> ${category}</p>
+                        <p><strong>Cidade:</strong> ${citySelect}</p>
+                        <p class="suspensa-text"><strong>SUSPENSO</strong></p>
+                        <button class="view-profile-button" disabled style = "background-color: grey">Ver perfil</button>
+                    `;
+
+                    // Adicione um manipulador de eventos ao botão "Ver perfil"
+                    const viewProfileButton = card.querySelector(".view-profile-button");
+                    viewProfileButton.addEventListener("click", () => {
+                        // Implemente a ação desejada ao clicar no botão "Ver perfil" (por exemplo, redirecionar para a página de perfil)
+                        window.location.href = `PerfilEcommerce.html?name=${encodeURIComponent(ecommerce_name)}`;
+                        console.log(ecommerce_name);
+                    });
+
+                    ecommerceCardsContainer.appendChild(card); 
+                    }
+                }
+            });
+        }, (error) => {
+            console.error("Erro ao obter os dados do Realtime Database: " + error);
+            $("#progress-bar-container").hide();
+        });
+    </script>
+</body>
+</html>

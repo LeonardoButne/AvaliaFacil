@@ -1,0 +1,10 @@
+
+
+
+
+
+.color1 { #215b93 };mais escuro
+.color2 { #3c72ac };
+.color3 { #5789c5 };
+.color4 { #71a0de };
+.color5 { #8cb7f7 };mais claro

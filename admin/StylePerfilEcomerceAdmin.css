@@ -1,0 +1,176 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#profileDetails {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+#ratingForm {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#ratingForm h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#ratingForm label {
+    display: block;
+    margin: 15px 0 5px;
+    color: #555;
+}
+
+#starRating {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+#comment {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+#submitRating {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+#submitRating:hover {
+    background-color: #0056b3;
+}
+
+.avaliacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.star-icon {
+    list-style-type: none;
+    border: 1px solid #fff;
+    cursor: pointer;
+    color: #ffe500;
+    font-size: 40px;
+    margin: 0 5px;
+}
+
+.star-icon::before {
+    content: "\2605";
+}
+
+.star-icon.ativo ~ .star-icon::before {
+    content: "\2606";
+}
+
+.avaliacao:hover .star-icon::before {
+    content: "\2605";
+}
+
+.star-icon:hover ~ .star-icon::before {
+    content: "\2606";
+}
+
+#comments-container {
+max-height: 300px; /* Defina a altura máxima desejada */
+overflow-y: auto; /* Adicione a rolagem vertical */
+}
+
+#comments {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+#comments li {
+border-bottom: 1px solid #ccc;
+padding: 10px;
+margin-bottom: 10px;
+}
+
+#comments li:last-child {
+border-bottom: none; /* Remove a borda inferior do último item */
+}
+
+#comments li strong {
+font-weight: bold;
+color: #007BFF; /* Cor para o nome do usuário */
+}
+
+#comments li p {
+margin: 0;
+}
+
+#comments li p.comment {
+color: #333;
+}
+
+#comments li:hover {
+background-color: #f4f4f4; /* Adiciona um efeito de destaque ao passar o mouse */
+}
+
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.action-buttons button.delete-button {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.action-buttons button.suspend-button {
+    background-color: #f0ad4e;
+    color: #fff;
+}
+
+.action-buttons button.edit-button {
+    background-color: #5bc0de;
+    color: #fff;
+}

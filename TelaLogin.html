@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CadastroConsumidorStyle.css">
+    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
+    <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+    <script src="firebaseLogin.js"></script>
+    <style>
+        #progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            margin-top: 10px;
+            display: none; /* Começa escondido */
+            overflow: hidden; /* Oculta o overflow para que a animação não ultrapasse a barra */
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 50%;
+            background-color: #4caf50;
+            transition: width 0.5s ease; /* Adiciona uma transição suave na largura */
+        }
+
+    </style>
+    
+</head>
+<body>
+    
+
+    <div class="container">
+        <div id="progress-bar-container">
+            <div id="progress-bar">
+        </div>
+    </div>
+        
+        <h1 class="label">Login como consumidor</h1>
+        <form class="login_form" id="login_form" name="form">
+            <div class="font">Email</div>
+            <input type="text" name="email" id="email" autocomplete="off">
+            <div id="email_error">Verifique o seu email!</div>
+            <div class="font font2">Senha</div>
+            <input type="password" name="password" id="password">
+            <div id="password_error">A senha deve conter pelo menos 6 caracteres!</div>
+            <button type="button" onclick="login()">Login</button>
+            <button type="button" id="btn-cadastrar" onclick="abrirCadastros()" >Cadastre-se</button>
+        </form>
+
+    </div>
+    <script>
+        function abrirCadastros(){
+            window.location.href = "TipoCadastro.html";
+        }
+    </script>
+</body>
+</html>

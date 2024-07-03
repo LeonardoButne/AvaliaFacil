@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Consumidores</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #adminPanel {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .item {
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item button {
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .item button:hover {
+            background-color: #c9302c;
+        }
+
+        /* Estilizando os botões para dar uma aparência mais moderna */
+        .button {
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Estilo para a tabela (lista de itens) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestão de Consumidores</h1>
+    <div id="adminPanel">
+        <div class="section" id="consumerManagementSection">
+            <h2>Gestão de Consumidores</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Provincia</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="consumerList">
+                    <!-- Os consumidores serão inseridos aqui -->
+                </tbody >
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+    apiKey: "AIzaSyA5W3WDwlAgF8Qn5ptmZ4V4JvVaHQ5KBEk",
+    authDomain: "feedback-aqui.firebaseapp.com",
+    databaseURL: "https://feedback-aqui-default-rtdb.firebaseio.com",
+    projectId: "feedback-aqui",
+    storageBucket: "feedback-aqui.appspot.com",
+    messagingSenderId: "390730068105",
+    appId: "1:390730068105:web:4f9c564b63192d6ddc5658",
+    measurementId: "G-4V5LL17MRE"
+  };
+
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+        const feedbackAquiDB2 = firebase.database().ref("feedbackAqui");
+const consumerListContainer = document.getElementById("consumerList");
+
+feedbackAquiDB2.child("consumidores").on("value", (snapshot) => {
+    consumerListContainer.innerHTML = ''; // Limpar a lista existente
+
+    const consumidoresPromises = [];
+
+    snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        const consumerId = childSnapshot.key;
+        const nomeConsumidor = data.nome || "Nome não encontrado";
+        const provinciaConsumidor = data.provincia || "Nome não encontrado";
+        const emailConsumidor = data.email || "Nome não encontrado";
+
+
+        // Crie uma linha na tabela para cada consumidor
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${nomeConsumidor}</td>
+            <td>${emailConsumidor}</td>
+            <td>${provinciaConsumidor}</td>
+            <td>
+                <button class="button" onclick="verDetalhes('${consumerId}')">Ver detalhes</button>
+            </td>
+        `;
+
+        consumerListContainer.appendChild(row);
+
+        consumidoresPromises.push({ nome: nomeConsumidor });
+    });
+
+    Promise.all(consumidoresPromises)
+        .then((consumidores) => {
+            // Se precisar, faça algo com os consumidores aqui
+        })
+        .catch((error) => {
+            console.error("Erro ao obter dados dos consumidores: " + error);
+        });
+}, (error) => {
+    console.error("Erro ao obter os consumidores: " + error);
+});
+
+function verDetalhes(consumerId) {
+    // Redirecionar para a página de detalhes do consumidor, passando o ID do consumidor como parâmetro
+    window.location.href = `PerfilDeComsumidorAdmin.html?consumerId=${encodeURIComponent(consumerId)}`;
+}
+
+
+        function removeConsumer(consumerId) {
+            // Implemente a lógica de remoção do consumidor aqui
+            // ...
+        }
+
+        function suspendConsumer(consumerId) {
+            // Implemente a lógica de suspensão do consumidor aqui
+            // ...
+        }
+
+function obterEExibirConsumidores() {
+    
+}
+
+function exibirConsumidores(consumidores) {
+    const consumidoresList = document.getElementById("consumidoresList");
+
+    consumidoresList.innerHTML = "";
+    consumidores.forEach((consumidor) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = consumidor.nome;
+
+        consumidoresList.appendChild(listItem);
+    });
+}
+    </script>
+</body>
+</html>

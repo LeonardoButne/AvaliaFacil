@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de E-commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CadastroConsumidorStyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
+    
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="cerebroCadastroEcommerce.js"></script>
+    <script type = "module" src = "firebaseEcommerce.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="label">Cadastro de E-commerce</h1>
+        <form class="login_form" id="cadastroEcommerce_form" action="" name="form">
+            <div class="font">Dados do E-commerce</div>
+            <div class="font font2">Nome do E-commerce</div>
+            <input type="text" id="ecommerce_name" name="ecommerce_name" autocomplete="off">
+            <div class="font">Categoria</div>
+            <select name="category" id="category">
+                <option value="Eletrônicos">Eletrônicos</option>
+                <option value="Moda">Moda</option>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Móveis">Móveis</option>
+                <option value="Esportes">Esportes</option>
+                <!-- Adicione mais categorias aqui -->
+            </select>
+            <div class="font">Provincia</div>
+            <select name="province" id="provinceSelect">
+                <option value="Selecione a provincia">Selecione a provincia</option>
+                <!-- Adicione as províncias de Moçambique aqui -->
+            </select>
+            <div class="font">Cidade</div>
+            <select name="city" id="citySelect" disabled>
+                <option value="Selecione a provincia primeiro">Selecione a provincia primeiro</option>
+            </select>
+            <div class="font">Website ou link da pagina na rede social</div>
+            <input type="text" name="website" id="website" autocomplete="off">
+            <div class="font">Telefone</div>
+            <input type="tel" name="phone" id="phone" placeholder="(  )">
+            <div class="font">Email de Contato</div>
+            <input type="email" name="contact_email" id="contact_email" autocomplete="off">
+            <div class="font font2">Representante Legal</div>
+            <input type="text" name="legal_representative" id="legal_representative" autocomplete="off">
+            <div class="font">Data de Fundação</div>
+            <input type="text" name="foundation_date" id="foundation_date" placeholder="dd/mm/aaaa" readonly>
+            <button type="submit">Cadastre-se</button>
+        </form>
+    </div>
+
+    <script>
+        $(function() {
+            $("#foundation_date").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "1900:c"
+            });
+        });
+    </script>
+
+    <script>
+        // Adicione a lista de províncias de Moçambique aqui
+        const provinces = [
+            "Maputo",
+            "Gaza",
+            "Inhambane",
+            "Sofala",
+            "Manica",
+            "Tete",
+            "Zambezia",
+            "Nampula",
+            "Cabo Delgado",
+            "Niassa"
+        ];
+
+        const selectProvincia = document.getElementById("provinceSelect");
+
+        provinces.forEach(province => {
+            const option = document.createElement("option");
+            option.value = province;
+            option.text = province;
+            selectProvincia.appendChild(option);
+        });
+
+        // Adicione o código para preencher as cidades com base na província, como feito anteriormente
+        
+    const cities = {
+    "Maputo": ["Maputo City", "Matola"],
+    "Gaza": ["Chókwè", "Xai-Xai"],
+    "Inhambane": ["Inhambane City", "Maxixe"],
+    "Sofala": ["Beira"],
+    "Manica": ["Chimoio"],
+    "Tete": ["Tete City"],
+    "Zambezia": ["Quelimane"],
+    "Nampula": ["Nampula City", "Nacala"],
+    "Cabo Delgado": ["Pemba"],
+    "Niassa": ["Lichinga"]
+};
+
+const selectCidades = document.getElementById("citySelect");
+
+provinceSelect.addEventListener("change", function() {
+    const selectedProvince = this.value;
+    selectCidades.innerHTML = ""; // Limpa as opções existentes
+    if (selectedProvince in cities) {
+        const provinceCities = cities[selectedProvince];
+        provinceCities.forEach(city => {
+            const optionCity = document.createElement("option");
+            optionCity.value = city;
+            optionCity.text = city;
+            selectCidades.appendChild(optionCity);
+        });
+        selectCidades.disabled = false; // Ativa o campo de cidade
+    } else {
+        selectCidades.disabled = true; // Desativa o campo de cidade se a província não tiver cidades definidas
+    }
+});
+    
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+
+</body>
+</html>

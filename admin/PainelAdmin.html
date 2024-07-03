@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #adminPanel {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .item {
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item button {
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .item button:hover {
+            background-color: #508a50;
+        }
+
+        /* Estilizando os botões para dar uma aparência mais moderna */
+        .button {
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Estilo para a tabela (lista de itens) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #bc1111;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Painel de Administração</h1>
+    <div id="adminPanel">
+        <div class="section" id="overviewSection">
+            <h2>Visão Geral</h2>
+            <div class="item">
+                <div class="item-content">
+                    <!-- Adicione elementos para exibir estatísticas e atividades recentes -->
+                    <p>Atividades recentes: Shop Now encontra-se no Top 3</p>
+                </div>
+                <button type="button" class="button">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="section" id="ecommerceManagementSection">
+            <h2>Gestão de E-commerces</h2>
+            <div class="item">
+                <div class="item-content">
+                    <h3>Lista de E-comerces</h3>                    
+                </div>
+                <button type="button" class="button" onclick="abrirEcommerces();">Ver E-commerces</button>
+            </div>
+            <!-- Adicione mais itens conforme necessário -->
+        </div>
+
+        <div class="section" id="userManagementSection">
+            <h2>Gestão de Usuários</h2>
+            <div class="item">
+                <div class="item-content">
+                    <h3>Usuários cadastrados</h3>
+                </div>
+                <button class="button" onclick="abrirConsumidores();">Ver Usuários</button>
+            </div>
+            <!-- Adicione mais itens conforme necessário -->
+        </div>
+
+        <div class="section" id="commentModerationSection">
+            <h2>Moderação de Comentários</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Comentário</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nome do Usuário</td>
+                        <td>Comentário Ofencivo...</td>
+                        <td><button class="button" style="background-color: red;">X</button></td>
+                    </tr>
+                    <tr>
+                        <td>Nome do Usuário</td>
+                        <td>Comentário Ofencivo...</td>
+                        <td><button class="button" style="background-color: red;">X</button></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Nome do Usuário</td>
+                        <td>Comentário Ofencivo...</td>
+                        <td><button class="button" style="background-color: red;">X</button></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Nome do Usuário</td>
+                        <td>Comentário Ofencivo...</td>
+                        <td><button class="button" style="background-color: red;">X</button></td>
+                        
+                    </tr>
+                    <!-- Adicione mais linhas conforme necessário -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function abrirEcommerces(){
+            window.location.href = "listaDeEcommerces.html";
+        }
+        function abrirConsumidores(){
+            window.location.href = "listaDeConsumidores.html";
+        }
+    </script>
+
+</body>
+</html>
