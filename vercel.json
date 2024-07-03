@@ -1,5 +1,5 @@
 {
     "rewrites": [
-      { "source": "/(.*)", "destination": "/TelaPrincipal.html" }
+      { "source": "/(.*)", "destination": "/AvaliaFacil/TelaPrincipal.html" }
     ]
   }
