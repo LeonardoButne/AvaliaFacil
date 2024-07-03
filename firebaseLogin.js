@@ -9,8 +9,9 @@ const firebaseConfig = {
     measurementId: "G-4V5LL17MRE"
 };
 
-const feedbackAquiDB2 = firebase.database().ref("feedbackAqui");
 firebase.initializeApp(firebaseConfig);
+const feedbackAquiDB2 = firebase.database().ref("feedbackAqui");
+
 
 
 
@@ -51,7 +52,7 @@ function login() {
         })
         .catch(error => {
             console.error("Erro no login:", error);
-            //alert(getErrorMessage(error));
+            alert(getErrorMessage(error));
 
             $("#progress-bar-container").hide();
         });
