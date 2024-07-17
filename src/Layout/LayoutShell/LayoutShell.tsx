@@ -10,8 +10,8 @@ export default function LayoutShell() {
 
   return (
     <AppShell
-      header={{ height: 60 }}
-      padding="md"
+      header={{ height: 20 }}
+      padding="sm"
     >
       <AppShell.Header>
           <Navbar/>
@@ -21,9 +21,9 @@ export default function LayoutShell() {
         <RoutesComponent/>
       </AppShell.Main>
 
-      <AppShell.Footer>
+      <AppShell.Section>
         <Footer/>
-      </AppShell.Footer>
+      </AppShell.Section>
     </AppShell>
   );
 }

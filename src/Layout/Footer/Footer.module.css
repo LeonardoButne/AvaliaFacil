@@ -3,7 +3,8 @@
     padding-top: calc(var(--mantine-spacing-xl) * 2);
     padding-bottom: calc(var(--mantine-spacing-xl) * 2);
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
-    border-top: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+    border-top: rem(10px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+    margin-bottom: rem(-110px);
   }
   
   .logo {
