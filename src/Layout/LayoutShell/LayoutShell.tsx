@@ -3,6 +3,7 @@ import { RoutesComponent } from "../../Routes";
 import { useDisclosure } from "@mantine/hooks";
 import { Navbar } from "../Navbar/Navbar";
 import { Footer } from "../Footer/Footer";
+import Login from "../../Pages/Login";
 
 export default function LayoutShell() {
   const [opened, { toggle }] = useDisclosure();
@@ -16,7 +17,9 @@ export default function LayoutShell() {
           <Navbar/>
       </AppShell.Header>
       
-      <AppShell.Main>Main</AppShell.Main>
+      <AppShell.Main>
+        <RoutesComponent/>
+      </AppShell.Main>
 
       <AppShell.Footer>
         <Footer/>
