@@ -1,0 +1,6 @@
+.cards {
+    display: inline-block;
+    width: 20px; /* ajuste o valor para o tamanho desejado */
+    margin: 10px; /* adicione um espaçamento entre os cards */
+    margin-bottom: 20px;
+}
