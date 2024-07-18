@@ -22,6 +22,7 @@ interface Ecommerce {
   foundation_date: string;
   status: boolean;
   profileImage: string;
+  suspended: boolean;
 }
 
 const EcommerceData: React.FC = () => {
@@ -76,9 +77,9 @@ const EcommerceData: React.FC = () => {
             </Grid.Col>
           ))
         ) : (
-          <Grid.Col span={12}>
+        
             <Spinner />
-          </Grid.Col>
+         
         )}
       </Grid>
     </Container>

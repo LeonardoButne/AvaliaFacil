@@ -36,7 +36,7 @@ const EcommerceCard: React.FC<EcommerceProps> = ({ ecommerce }) => {
           sizes="sm"
           height={300}
           alt={`${ecommerce.ecommerce_name} logo`}
-          radius="md"
+          radius="xl"
         />
       </Card.Section>
 

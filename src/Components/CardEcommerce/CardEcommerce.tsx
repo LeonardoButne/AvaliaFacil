@@ -1,8 +1,8 @@
 // EcommerceCard.tsx
 import React from 'react';
-import { Card, Image, Text, Badge, Button, Group, Grid } from '@mantine/core';
+import { Card, Text, Badge, Button, Group, Avatar, Center } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import './CardEcommerce.css';
+
 
 interface EcommerceProps {
   ecommerce: {
@@ -16,7 +16,7 @@ interface EcommerceProps {
     contact_email: string;
     legal_representative: string;
     foundation_date: string;
-    status: boolean;
+    suspended: boolean; // Ajuste para incluir a propriedade 'suspended'
     profileImage: string;
   };
 }
@@ -29,23 +29,27 @@ const CardEcommerce: React.FC<EcommerceProps> = ({ ecommerce }) => {
   };
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder style={{marginTop: '40px' ,width: '300px', height: '450px' }}>
+    <Card shadow="sm" padding="sm" radius="md" withBorder style={{ marginTop: '50px', width: '300px', height: '350px' }}>
       <Card.Section>
-        <Image
-          src={ecommerce.profileImage}
-          sizes="sm"
-          height={200}
-          alt={`${ecommerce.ecommerce_name} logo`}
-          radius="md"
-        />
+        <Center>
+          <Avatar
+          
+            src={ecommerce.profileImage}
+            alt={ecommerce.ecommerce_name}
+            size="150"
+             
+            radius="100%"
+            style={{ border: '2px solid #f5b50a'}}
+          />
+        </Center>
       </Card.Section>
 
       <Group justify="space-between" mt="md" mb="xs">
         <Text fw={500}>{ecommerce.ecommerce_name}</Text>
-        {ecommerce.status ? (
-          <Badge color="green">Active</Badge>
+        {ecommerce.suspended ? (
+          <Badge color="red">Suspenso</Badge> // Exibe "Suspenso" se a propriedade for true
         ) : (
-          <Badge color="red">Suspended</Badge>
+          <Badge color="green">Activo</Badge> // Exibe "Ativo" se a propriedade for false
         )}
       </Group>
 
