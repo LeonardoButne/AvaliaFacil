@@ -1,8 +1,10 @@
-import { Card, Group, Badge, Button, Text, Center, Image, Grid } from '@mantine/core';
+import { Card, Group, Button, Text, Center, Image, Grid } from '@mantine/core';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconGasStation, IconGauge, IconManualGearbox, IconUsers } from '@tabler/icons-react';
 import classes from './TipoCadastro.module.css';
+import imagemConsumidor from '../../assets/group.png';
+import imagemEcommerce from '../../assets/online-shop.png';
 
 const mockdata1 = [
   { label: '4 passengers', icon: IconUsers },
@@ -22,11 +24,10 @@ interface CardComponentProps {
   data: typeof mockdata1;
   image: string;
   title: string;
-  price: string;
   buttonLink: string;
 }
 
-const CardComponent: React.FC<CardComponentProps> = ({ data, image, title, price, buttonLink }) => {
+const CardComponent: React.FC<CardComponentProps> = ({ data, image, title, buttonLink }) => {
   const navigate = useNavigate();
 
   const features = data.map((feature) => (
@@ -37,44 +38,24 @@ const CardComponent: React.FC<CardComponentProps> = ({ data, image, title, price
   ));
 
   return (
-    <Card withBorder radius="md" className={classes.card}>
+    <Card withBorder radius="md" className={classes.card} style={{width: '100%' }}>
       <Card.Section className={classes.imageSection}>
         <Image src={image} alt={title} />
       </Card.Section>
 
-      <Group justify="space-between" mt="md">
+      <Group align="apart" mt="md">
         <div>
           <Text fw={500}>{title}</Text>
           <Text fz="xs" c="dimmed">
             Free recharge at any station
           </Text>
         </div>
-        <Badge variant="outline">25% off</Badge>
       </Group>
-
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
-        </Text>
-
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
 
       <Card.Section className={classes.section}>
         <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              {price}
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
-
           <Button radius="xl" style={{ flex: 1 }} onClick={() => navigate(buttonLink)}>
-            Rent now
+            Cadastrar-se
           </Button>
         </Group>
       </Card.Section>
@@ -84,26 +65,26 @@ const CardComponent: React.FC<CardComponentProps> = ({ data, image, title, price
 
 const TipoCadastro: React.FC = () => {
   return (
-    <Grid>
-      <Grid.Col span={6}>
-        <CardComponent 
-          data={mockdata1} 
-          image="https://i.imgur.com/ZL52Q2D.png" 
-          title="Tesla Model S" 
-          price="$168.00" 
-          buttonLink="/cadastro_consumidor"
-        />
-      </Grid.Col>
-      <Grid.Col span={6}>
-        <CardComponent 
-          data={mockdata2} 
-          image="https://i.imgur.com/someotherimage.png" 
-          title="Tesla Model X" 
-          price="$200.00" 
-          buttonLink="/cadastro_ecommerce"
-        />
-      </Grid.Col>
-    </Grid>
+    <Center style={{ height: '100vh' }}>
+      <Grid justify="center" align="center" style={{width: '100%', maxWidth: '100%' }}>
+        <Grid.Col span={2}>
+          <CardComponent 
+            data={mockdata1} 
+            image={imagemConsumidor} 
+            title="Cadastrar-se como Consumidor" 
+            buttonLink="/cadastro_consumidor"
+          />
+        </Grid.Col>
+        <Grid.Col span={2}>
+          <CardComponent 
+            data={mockdata2} 
+            image={imagemEcommerce} 
+            title="Cadastrar-se como Ecommerce" 
+            buttonLink="/cadastro_ecommerce"
+          />
+        </Grid.Col>
+      </Grid>
+      </Center>
   );
 };
 

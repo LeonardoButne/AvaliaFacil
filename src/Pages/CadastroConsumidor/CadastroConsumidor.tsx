@@ -6,8 +6,16 @@ import 'firebase/compat/firestore';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Container, TextInput, PasswordInput, Select, Button, Paper, Title, Text, Group } from '@mantine/core';
+import { firebaseConfig } from '../../Config/FirebaseConfig';
+import { useNavigate } from 'react-router-dom';
+
 
 // Inicialize o Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+
 
 const provinces = [
     "Maputo",
@@ -46,6 +54,7 @@ const CadastroConsumidor: React.FC = () => {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleCadastroSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -88,6 +97,7 @@ const CadastroConsumidor: React.FC = () => {
             setConfirmPassword('');
 
             alert("Usuário cadastrado com sucesso!");
+            navigate('/login')
         } catch (error) {
             alert("Erro ao cadastrar usuário. Verifique o console para mais detalhes.");
         }
