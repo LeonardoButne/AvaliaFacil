@@ -1,0 +1,16 @@
+/* EcommerceProfile.module.css */
+.ecommerceCard {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    margin-right: 35rem; /* Ajuste conforme necessário */
+  }
+  
+  .infoContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: -10rem;
+  }
+  

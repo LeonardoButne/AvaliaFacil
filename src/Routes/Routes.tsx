@@ -15,9 +15,6 @@ export const RoutesComponent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/tipo_cadastro" element={<TipoCadastro />} />
-          <Route path="/cadastro_consumidor" element={<CadastroConsumidor />} />
-
           <Route path="/cadastro_consumidor" element={<CadastroConsumidor />} />
           <Route path="/tipo_cadastro" element={<TipoCadastro />} />
           <Route path="/perfil/:ecommerce_id" element={<PerfilEcommerce />} />

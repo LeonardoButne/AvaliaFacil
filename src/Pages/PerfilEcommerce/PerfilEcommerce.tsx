@@ -3,8 +3,9 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/database';
 import { useNavigate } from 'react-router-dom';
-import { Container, Card, Grid, Text, Title, Group, Button, Textarea, Center, Paper, ScrollArea } from '@mantine/core'; // Importe Scrollbar do Mantine
+import { Container, Card, Grid, Text, Title, Group, Button, Textarea, Center, Paper, ScrollArea, Avatar } from '@mantine/core'; // Importe ScrollArea do Mantine
 import { CommentHtml } from '../../Components/CommentHtml/CommentHtml';
+import classes from './PerfilEcommerce.module.css'
 
 const firebaseConfig = {
     // Configuração do Firebase
@@ -38,7 +39,7 @@ const EcommerceProfile: React.FC = () => {
         const pathParts = window.location.pathname.split('/');
         const ecommerceName = decodeURIComponent(pathParts[pathParts.length - 1]);
         if (ecommerceName) {
-            feedbackAquiDB2.child("ecommerces").orderByChild("ecommerce_id").equalTo(ecommerceId).on("value", (snapshot) => {
+            feedbackAquiDB2.child("ecommerces").orderByChild("ecommerce_name").equalTo(ecommerceName).on("value", (snapshot) => {
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
                     setEcommerce(data);
@@ -74,7 +75,7 @@ const EcommerceProfile: React.FC = () => {
 
                 Promise.all(comentariosPromises)
                     .then((comentarios) => {
-                        // Limitar para 4 comentários
+
                         setComentarios(comentarios);
                         setAvaliacoes(newAvaliacoes);
                     })
@@ -138,33 +139,45 @@ const EcommerceProfile: React.FC = () => {
     };
 
     return (
-        <Container>
+        <Container style={{ marginTop: '40px' }}>
             <Center>
-                <Title order={1}>Perfil do E-commerce</Title>
+                <Title order={1} >Perfil do E-commerce</Title>
             </Center>
-            <Grid gutter="lg" justify="center">
-                <Grid.Col span={6}>
-                    <Card shadow="sm" padding="lg">
+            <Grid gutter="lg" justify="center" >
+                <Grid.Col span={15}>
+                    <Card padding="md" className={classes.ecommerceCard}>
                         {ecommerce && (
                             <>
-                                <Title order={2}>{ecommerce.ecommerce_name}</Title>
-                                <Text><strong>Categoria:</strong> {ecommerce.category}</Text>
-                                <Text><strong>Website:</strong> <a href={ecommerce.website} target="_blank" rel="noopener noreferrer">{ecommerce.website}</a></Text>
-                                <Text><strong>Província:</strong> {ecommerce.provinceSelect}</Text>
-                                <Text><strong>Cidade:</strong> {ecommerce.citySelect}</Text>
-                                <Text><strong>Telefone:</strong> {ecommerce.phone}</Text>
-                                <Text><strong>Email de Contato:</strong> {ecommerce.contact_email}</Text>
-                                <Text><strong>Representante Legal:</strong> {ecommerce.legal_representative}</Text>
-                                <Text><strong>Data de Fundação:</strong> {ecommerce.foundation_date}</Text>
-                                <Text><strong>Média de Avaliações:</strong> {calcularMedia(avaliacoes).toFixed(1)}</Text>
+                                <Avatar
+                                    src={ecommerce.profileImage}
+                                    alt={ecommerce.ecommerce_name}
+                                    size="150"
+                                    radius="100%"
+                                    className={classes.avatar}
+
+                                />
+
+                                <div className={classes.infoContainer}>
+                                    <Title order={2}>{ecommerce.ecommerce_name}</Title>
+                                    <Text><strong>Categoria:</strong> {ecommerce.category}</Text>
+                                    <Text><strong>Website:</strong> <a href={ecommerce.website} target="_blank" rel="noopener noreferrer">{ecommerce.website}</a></Text>
+                                    <Text><strong>Província:</strong> {ecommerce.provinceSelect}</Text>
+                                    <Text><strong>Cidade:</strong> {ecommerce.citySelect}</Text>
+                                    <Text><strong>Telefone:</strong> {ecommerce.phone}</Text>
+                                    <Text><strong>Email de Contato:</strong> {ecommerce.contact_email}</Text>
+                                    <Text><strong>Representante Legal:</strong> {ecommerce.legal_representative}</Text>
+                                    <Text><strong>Data de Fundação:</strong> {ecommerce.foundation_date}</Text>
+                                    <Text><strong>Média de Avaliações:</strong> {calcularMedia(avaliacoes).toFixed(1)}</Text>
+                                </div>
                             </>
                         )}
                     </Card>
                 </Grid.Col>
-                <Grid.Col span={6}>
-                    <Card shadow="sm" padding="lg">
+
+                <Grid.Col span={10}>
+                    <Card shadow="sm" padding="lg" style={{ marginTop: '40px' }}>
                         <Title order={2}>Comentários sobre {ecommerce?.ecommerce_name}</Title>
-                        <ScrollArea>
+                        <ScrollArea h={450}>
                             <div>
                                 {comentarios.map((comentario, index) => (
                                     <CommentHtml
@@ -184,7 +197,7 @@ const EcommerceProfile: React.FC = () => {
             <Card shadow="sm" padding="lg" mt="xl">
                 <Title order={2}>Deixe sua avaliação</Title>
                 <Center>
-                    <Group align="center" >
+                    <Group align="center">
                         {[1, 2, 3, 4, 5].map((value) => (
                             <div
                                 key={value}

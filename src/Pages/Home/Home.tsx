@@ -1,12 +1,13 @@
 // EcommerceData.tsx
 import React from 'react';
 import { getDatabase, ref, onValue, DataSnapshot } from 'firebase/database';
-import { getApps, initializeApp } from 'firebase/app';
 import { Grid, Container } from '@mantine/core';
-import Spinner from '../../Components/PageLoader/Spinner.tsx';
+import Spinner from '../../Components/Spinner/Spinner.tsx';
+import CardEcommerce from '../../Components/CardEcommerce/CardEcommerce.tsx';
+import { getApps, initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../../Config/FirebaseConfig.ts';
-import EcommerceCard from '../../Components/EcommerceCard/EcommerceCard.tsx';
-import './Home.module.css';
+
+
 
 interface Ecommerce {
   id: string;
@@ -24,10 +25,12 @@ interface Ecommerce {
 }
 
 const EcommerceData: React.FC = () => {
+
   // Initialize Firebase app
   if (!getApps().length) {
     initializeApp(firebaseConfig);
   }
+
   
   // Get a reference to the database
   const db = getDatabase();
@@ -68,8 +71,8 @@ const EcommerceData: React.FC = () => {
       <Grid>
         {ecommerces.length > 0 ? (
           ecommerces.map((ecommerce) => (
-            <Grid.Col key={ecommerce.id} span={4} style={{ maxWidth: '100%' }}>
-              <EcommerceCard ecommerce={ecommerce} />
+            <Grid.Col key={ecommerce.id} span={4} >
+              <CardEcommerce ecommerce={ecommerce} />
             </Grid.Col>
           ))
         ) : (

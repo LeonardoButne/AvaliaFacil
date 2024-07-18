@@ -25,7 +25,6 @@ const Login: React.FC = () => {
     const handleLogin = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            alert("Entramos");
             navigate('/');
         } catch (error) {
             setError((error as Error).message);
@@ -71,7 +70,7 @@ const Login: React.FC = () => {
                         Forgot password?
                     </Anchor>
                 </Group>
-                <Button  fullWidth mt="xl" onClick={handleLogin}>
+                <Button fullWidth mt="xl" onClick={handleLogin}>
                     Sign in
                 </Button>
             </Paper>

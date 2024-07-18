@@ -25,7 +25,7 @@ const CardEcommerce: React.FC<EcommerceProps> = ({ ecommerce }) => {
   const navigate = useNavigate();
 
   const handleViewProfile = () => {
-    navigate(`/perfil/${ecommerce.id}`);
+    navigate(`/perfil/${ecommerce.ecommerce_name}`);
   };
 
   return (

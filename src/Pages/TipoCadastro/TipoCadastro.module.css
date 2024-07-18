@@ -1,31 +1,20 @@
 .card {
-    margin-top: 100px;
-    background-color: var(--mantine-color-body);
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
   }
   
-  .imageSection {
-    padding: var(--mantine-spacing-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-  }
-  
-  .label {
-    margin-bottom: var(--mantine-spacing-xs);
-    line-height: 1;
-    font-weight: 700;
-    font-size: var(--mantine-font-size-xs);
-    letter-spacing: rem(-0.25px);
-    text-transform: uppercase;
+  .imageSection img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
   
   .section {
-    padding: var(--mantine-spacing-md);
-    border-top: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    padding: 15px 0;
   }
   
   .icon {
-    margin-right: rem(5px);
-    color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-2));
+    margin-right: 5px;
   }
+  
