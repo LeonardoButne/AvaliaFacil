@@ -7,6 +7,10 @@ const TipoCadastro = React.lazy(() => import("../Pages/TipoCadastro"));
 const CadastroConsumidor = React.lazy(() => import("../Pages/CadastroConsumidor"));
 
 
+const CadastroConsumidor = React.lazy(() => import("../Pages/CadastroConsumidor"));
+const TipoCadastro = React.lazy(() => import("../Pages/TipoCadastro"));
+const PerfilEcommerce = React.lazy(() => import("../Pages/PerfilEcommerce"));
+
 
 export const RoutesComponent = () => {
     return (
@@ -17,6 +21,10 @@ export const RoutesComponent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/tipo_cadastro" element={<TipoCadastro />} />
           <Route path="/cadastro_consumidor" element={<CadastroConsumidor />} />
+
+          <Route path="/cadastro_consumidor" element={<CadastroConsumidor />} />
+          <Route path="/tipo_cadastro" element={<TipoCadastro />} />
+          <Route path="/perfil/:ecommerce_id" element={<PerfilEcommerce />} />
 
         </Routes>
       </React.Suspense>

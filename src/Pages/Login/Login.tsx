@@ -22,7 +22,6 @@ const Login: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-
     const handleLogin = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
