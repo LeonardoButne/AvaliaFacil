@@ -10,6 +10,8 @@ import {
     Container,
     Group,
     Button,
+    LoadingOverlay,
+    Box
 } from '@mantine/core';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../Config/FirebaseConfig.ts'; // Ajuste o caminho conforme necessário
@@ -20,14 +22,18 @@ const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
+        setLoading(true);
         try {
             await signInWithEmailAndPassword(auth, email, password);
             navigate('/');
         } catch (error) {
             setError((error as Error).message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -48,31 +54,34 @@ const Login: React.FC = () => {
             </Text>
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                <TextInput
-                    label="Email"
-                    placeholder="you@mantine.dev"
-                    required
-                    value={email}
-                    onChange={(event) => setEmail(event.currentTarget.value)}
-                />
-                <PasswordInput
-                    label="Password"
-                    placeholder="Your password"
-                    required
-                    mt="md"
-                    value={password}
-                    onChange={(event) => setPassword(event.currentTarget.value)}
-                />
-                {error && <Text color="red">{error}</Text>}
-                <Group justify="space-between" mt="lg">
-                    <Checkbox label="Remember me" />
-                    <Anchor component="button" size="sm">
-                        Forgot password?
-                    </Anchor>
-                </Group>
-                <Button fullWidth mt="xl" onClick={handleLogin}>
-                    Sign in
-                </Button>
+                <Box pos="relative">
+                    <LoadingOverlay visible={loading} loaderProps={{ children: 'Loading...' }} />
+                    <TextInput
+                        label="Email"
+                        placeholder="you@mantine.dev"
+                        required
+                        value={email}
+                        onChange={(event) => setEmail(event.currentTarget.value)}
+                    />
+                    <PasswordInput
+                        label="Password"
+                        placeholder="Your password"
+                        required
+                        mt="md"
+                        value={password}
+                        onChange={(event) => setPassword(event.currentTarget.value)}
+                    />
+                    {error && <Text color="red">{error}</Text>}
+                    <Group justify="space-between" mt="lg">
+                        <Checkbox label="Remember me" />
+                        <Anchor component="button" size="sm">
+                            Forgot password?
+                        </Anchor>
+                    </Group>
+                    <Button fullWidth mt="xl" onClick={handleLogin} disabled={loading}>
+                        Sign in
+                    </Button>
+                </Box>
             </Paper>
         </Container>
     );
