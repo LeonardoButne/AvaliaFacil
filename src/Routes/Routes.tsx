@@ -3,10 +3,6 @@ import { Routes, Route } from "react-router-dom"
 
 const Home = React.lazy(() => import("../Pages/Home"));
 const Login = React.lazy(() => import("../Pages/Login"));
-const TipoCadastro = React.lazy(() => import("../Pages/TipoCadastro"));
-const CadastroConsumidor = React.lazy(() => import("../Pages/CadastroConsumidor"));
-
-
 const CadastroConsumidor = React.lazy(() => import("../Pages/CadastroConsumidor"));
 const TipoCadastro = React.lazy(() => import("../Pages/TipoCadastro"));
 const PerfilEcommerce = React.lazy(() => import("../Pages/PerfilEcommerce"));
