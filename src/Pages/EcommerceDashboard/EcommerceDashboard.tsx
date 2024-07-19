@@ -4,8 +4,9 @@ import 'firebase/compat/auth';
 import 'firebase/compat/database';
 import 'firebase/compat/storage';
 import { useNavigate } from 'react-router-dom';
-import { Container, Card, TextInput, Button, Group, Textarea, Avatar, Title, Grid, Center } from '@mantine/core';
-import { CommentHtml } from '../../Components/CommentHtml/CommentHtml';
+import { Container, Card, TextInput, Button, Group, Textarea, Avatar, Title, Center, ScrollArea } from '@mantine/core';
+import { firebaseConfig } from '../../Config/FirebaseConfig';
+import CommentHtmlWithResponses from '../../Components/CommentHtmlWithResponses/CommentHtmlWithResponses';
 
 const EcommerceDashboard: React.FC = () => {
   const [ecommerce, setEcommerce] = useState<any>(null);
@@ -13,8 +14,14 @@ const EcommerceDashboard: React.FC = () => {
   const [comentarios, setComentarios] = useState<any[]>([]);
   const [editedProfile, setEditedProfile] = useState<any>({});
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [response, setResponse] = useState<{ [key: string]: string }>({});
 
   const navigate = useNavigate();
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
 
   useEffect(() => {
     const user = firebase.auth().currentUser;
@@ -38,9 +45,22 @@ const EcommerceDashboard: React.FC = () => {
         const newComentarios: any[] = [];
         snapshot.forEach((childSnapshot) => {
           const data = childSnapshot.val();
-          newComentarios.push(data);
+          newComentarios.push({ ...data, commentId: childSnapshot.key });
         });
-        setComentarios(newComentarios);
+
+        const fetchResponses = async () => {
+          for (let comentario of newComentarios) {
+            const responseSnapshot = await firebase.database().ref(`feedbackAqui/avaliacoes/${comentario.commentId}/responses`).once('value');
+            const responses: any[] = [];
+            responseSnapshot.forEach((childSnapshot) => {
+              responses.push(childSnapshot.val());
+            });
+            comentario.responses = responses;
+          }
+          setComentarios(newComentarios);
+        };
+
+        fetchResponses();
       });
     }
   }, [ecommerceId]);
@@ -75,6 +95,33 @@ const EcommerceDashboard: React.FC = () => {
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setProfileImage(e.target.files[0]);
+    }
+  };
+
+  const handleResponseChange = (commentId: string, text: string) => {
+    setResponse((prev) => ({ ...prev, [commentId]: text }));
+  };
+
+  const handleResponseSubmit = (commentId: string) => {
+    if (response[commentId]?.trim() !== "") {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        firebase.database().ref(`feedbackAqui/avaliacoes/${commentId}/responses`).push({
+          userId: user.uid,
+          userName: ecommerce.ecommerce_name, // Nome do e-commerce
+          response: response[commentId],
+          timestamp: new Date().toISOString(),
+        })
+        .then(() => {
+          setResponse((prev) => ({ ...prev, [commentId]: '' }));
+          alert("Resposta enviada com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar resposta:", error);
+        });
+      } else {
+        navigate('/login');
+      }
     }
   };
 
@@ -145,19 +192,23 @@ const EcommerceDashboard: React.FC = () => {
             </form>
           </Card>
 
-          <Card shadow="sm" padding="md" mb="lg">
+          <ScrollArea h={800}>
             <Title order={2}>Comentários</Title>
             {comentarios.map((comentario, index) => (
-              <CommentHtml
+              <CommentHtmlWithResponses
                 key={index}
                 nome={comentario.userName}
                 comentario={comentario.comment}
                 avatarUrl="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
                 tempo="Há algum tempo" // Pode ajustar para mostrar o tempo real
                 estrelas={comentario.starRating}
+                responses={comentario.responses || []}
+                commentId={comentario.commentId}
+                onResponseChange={(commentId: string, text: string) => handleResponseChange(commentId, text)}
+                onResponseSubmit={(commentId: string) => handleResponseSubmit(commentId)}
               />
             ))}
-          </Card>
+          </ScrollArea>
         </>
       )}
     </Container>
