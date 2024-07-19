@@ -8,6 +8,8 @@ const CadastroEcommerce = React.lazy(() => import("../Pages/CadastroEcommerce"))
 
 const TipoCadastro = React.lazy(() => import("../Pages/TipoCadastro"));
 const PerfilEcommerce = React.lazy(() => import("../Pages/PerfilEcommerce"));
+const EcommerceDashboard = React.lazy(() => import("../Pages/EcommerceDashboard"));
+
 
 
 export const RoutesComponent = () => {
@@ -21,6 +23,7 @@ export const RoutesComponent = () => {
           <Route path="/cadastro_ecommerce" element={<CadastroEcommerce />} />
           <Route path="/tipo_cadastro" element={<TipoCadastro />} />
           <Route path="/perfil/:ecommerce_id" element={<PerfilEcommerce />} />
+          <Route path="/dashboard" element={<EcommerceDashboard />} />
 
         </Routes>
       </React.Suspense>

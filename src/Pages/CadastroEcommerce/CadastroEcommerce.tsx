@@ -9,7 +9,6 @@ import { Container, TextInput, Select, Button, Paper, Title, Group } from '@mant
 import { useNavigate } from 'react-router-dom';
 import { firebaseConfig } from '../../Config/FirebaseConfig';
 
-
 // Inicialize o Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -52,6 +51,8 @@ const CadastroEcommerce: React.FC = () => {
     const [legalRepresentative, setLegalRepresentative] = useState('');
     const [foundationDate, setFoundationDate] = useState<Date | null>(null);
     const [profileImage, setProfileImage] = useState<File | null>(null);
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
 
     const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,8 +61,13 @@ const CadastroEcommerce: React.FC = () => {
         }
     };
 
-    const handleCadastroSubmit = (event: React.FormEvent) => {
+    const handleCadastroSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert("As senhas não correspondem.");
+            return;
+        }
 
         if (!profileImage) {
             alert("Por favor, selecione uma imagem de perfil.");
@@ -71,8 +77,15 @@ const CadastroEcommerce: React.FC = () => {
         const storageRef = firebase.storage().ref();
         const profileImageRef = storageRef.child(`profileImages/${profileImage.name}`);
 
-        profileImageRef.put(profileImage).then(() => {
-            profileImageRef.getDownloadURL().then((url) => {
+        try {
+            await profileImageRef.put(profileImage);
+            const url = await profileImageRef.getDownloadURL();
+
+            // Criar usuário no Firebase Authentication
+            const userCredential = await firebase.auth().createUserWithEmailAndPassword(contactEmail, password);
+            const user = userCredential.user;
+
+            if (user) {
                 const ecommerceData = {
                     ecommerce_name: ecommerceName,
                     category,
@@ -84,34 +97,33 @@ const CadastroEcommerce: React.FC = () => {
                     legal_representative: legalRepresentative,
                     foundation_date: foundationDate ? foundationDate.toISOString() : '',
                     profileImage: url,
-                    suspended: false
+                    suspended: false,
+                    userId: user.uid // Adicionar userId aqui
                 };
 
+                // Salvar os dados do e-commerce no Realtime Database
                 const db = firebase.database().ref("feedbackAqui/ecommerces");
-                db.push(ecommerceData)
-                    .then(() => {
-                        alert("E-commerce cadastrado com sucesso!");
-                        setEcommerceName('');
-                        setCategory('');
-                        setProvince('');
-                        setCity('');
-                        setWebsite('');
-                        setPhone('');
-                        setContactEmail('');
-                        setLegalRepresentative('');
-                        setFoundationDate(null);
-                        setProfileImage(null);
-                        navigate('/login');
-                    })
-                    .catch(error => {
-                        console.error("Erro ao cadastrar e-commerce:", error);
-                        alert("Erro ao cadastrar e-commerce. Verifique o console para mais detalhes.");
-                    });
-            });
-        }).catch(error => {
-            console.error("Erro ao fazer upload da imagem:", error);
-            alert("Erro ao fazer upload da imagem. Verifique o console para mais detalhes.");
-        });
+                await db.child(user.uid).set(ecommerceData);
+
+                alert("E-commerce cadastrado com sucesso!");
+                setEcommerceName('');
+                setCategory('');
+                setProvince('');
+                setCity('');
+                setWebsite('');
+                setPhone('');
+                setContactEmail('');
+                setLegalRepresentative('');
+                setFoundationDate(null);
+                setProfileImage(null);
+                setPassword('');
+                setConfirmPassword('');
+                navigate('/login');
+            }
+        } catch (error) {
+            console.error("Erro ao cadastrar e-commerce:", error);
+            alert("Erro ao cadastrar e-commerce. Verifique o console para mais detalhes.");
+        }
     };
 
     return (
@@ -192,6 +204,20 @@ const CadastroEcommerce: React.FC = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleProfileImageChange}
+                        required
+                    />
+                    <TextInput
+                        label="Senha"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.currentTarget.value)}
+                        required
+                    />
+                    <TextInput
+                        label="Confirmar Senha"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.currentTarget.value)}
                         required
                     />
                     <Group align="center" mt="xl">
