@@ -9,6 +9,7 @@ import { firebaseConfig } from '../../Config/FirebaseConfig';
 import CommentHtmlWithResponses from '../../Components/CommentHtmlWithResponses/CommentHtmlWithResponses';
 
 const EcommerceDashboard: React.FC = () => {
+  // Estados para armazenar dados do e-commerce, ID do e-commerce, comentários, perfil editado, imagem de perfil e resposta
   const [ecommerce, setEcommerce] = useState<any>(null);
   const [ecommerceId, setEcommerceId] = useState<string | null>(null);
   const [comentarios, setComentarios] = useState<any[]>([]);
@@ -18,14 +19,16 @@ const EcommerceDashboard: React.FC = () => {
 
   const navigate = useNavigate();
 
+  // Inicializa o Firebase se ainda não foi inicializado
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
-}
+  }
 
-
+  // Carrega dados do e-commerce quando o componente é montado
   useEffect(() => {
     const user = firebase.auth().currentUser;
     if (user) {
+      // Consulta o Firebase para obter dados do e-commerce usando o userId
       firebase.database().ref(`feedbackAqui/ecommerces`).orderByChild('userId').equalTo(user.uid).once('value', (snapshot) => {
         snapshot.forEach((childSnapshot) => {
           const data = childSnapshot.val();
@@ -35,10 +38,12 @@ const EcommerceDashboard: React.FC = () => {
         });
       });
     } else {
+      // Redireciona para a página de login se o usuário não estiver autenticado
       navigate('/login');
     }
   }, [navigate]);
 
+  // Carrega comentários e respostas quando o ID do e-commerce está disponível
   useEffect(() => {
     if (ecommerceId) {
       firebase.database().ref('feedbackAqui/avaliacoes').orderByChild('ecommerceId').equalTo(ecommerceId).on('value', (snapshot) => {
@@ -65,6 +70,7 @@ const EcommerceDashboard: React.FC = () => {
     }
   }, [ecommerceId]);
 
+  // Função para atualizar o perfil do e-commerce
   const handleProfileUpdate = (event: React.FormEvent) => {
     event.preventDefault();
     if (profileImage) {
@@ -92,16 +98,19 @@ const EcommerceDashboard: React.FC = () => {
     }
   };
 
+  // Função para lidar com a mudança da imagem de perfil
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setProfileImage(e.target.files[0]);
     }
   };
 
+  // Função para lidar com a mudança do texto da resposta
   const handleResponseChange = (commentId: string, text: string) => {
     setResponse((prev) => ({ ...prev, [commentId]: text }));
   };
 
+  // Função para enviar a resposta a um comentário
   const handleResponseSubmit = (commentId: string) => {
     if (response[commentId]?.trim() !== "") {
       const user = firebase.auth().currentUser;

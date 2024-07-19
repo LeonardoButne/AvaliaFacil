@@ -12,7 +12,7 @@ export const Navbar = () => {
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
-            Logo
+            Avalia Facil
         </Group>
 
         <Group>

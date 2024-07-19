@@ -2,13 +2,20 @@ import React from 'react';
 import { Text, Avatar, Group, TypographyStylesProvider, Paper } from '@mantine/core';
 import classes from './CommentHtml.module.css';
 
+interface Response {
+  userName: string;
+  response: string;
+  avatarUrl: string;
+  timestamp: string;
+}
+
 interface CommentHtmlProps {
   nome: string;
   comentario: string;
   avatarUrl: string;
   tempo: string;
   estrelas: number;
-  responses?: { [key: string]: string }[];
+  responses?: Response[];
 }
 
 export const CommentHtml: React.FC<CommentHtmlProps> = ({
@@ -35,25 +42,28 @@ export const CommentHtml: React.FC<CommentHtmlProps> = ({
           <div dangerouslySetInnerHTML={{ __html: comentario }} />
         </div>
       </TypographyStylesProvider>
-      {responses &&
-        responses.map((response, index) => (
-          <div key={index} className={classes.response}>
-            <Group align="center" ml="md">
-              <Avatar src={response.avatarUrl} alt={response.nome} radius="xl" />
-              <div>
-                <Text fz="sm">{response.nome}</Text>
-                <Text fz="xs" c="dimmed">
-                  {response.tempo}
-                </Text>
-              </div>
-            </Group>
-            <TypographyStylesProvider className={classes.body}>
-              <div className={classes.content}>
-                <div dangerouslySetInnerHTML={{ __html: response.comentario }} />
-              </div>
-            </TypographyStylesProvider>
-          </div>
-        ))}
+      {responses.length > 0 && (
+        <div className={classes.responses}>
+          {responses.map((response, index) => (
+            <Paper key={index} withBorder radius="md" className={classes.response} p="md" mt="md">
+              <Group align="center">
+                <Avatar src={response.avatarUrl} alt={response.userName} radius="xl" />
+                <div>
+                  <Text fz="sm">{response.userName}</Text>
+                  <Text fz="xs" c="dimmed">
+                    {new Date(response.timestamp).toLocaleString()}
+                  </Text>
+                </div>
+              </Group>
+              <TypographyStylesProvider className={classes.body}>
+                <div className={classes.content}>
+                  <div dangerouslySetInnerHTML={{ __html: response.response }} />
+                </div>
+              </TypographyStylesProvider>
+            </Paper>
+          ))}
+        </div>
+      )}
     </Paper>
   );
 };

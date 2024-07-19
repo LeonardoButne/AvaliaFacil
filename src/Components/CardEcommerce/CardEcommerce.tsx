@@ -28,7 +28,7 @@ const CardEcommerce: React.FC<EcommerceProps> = ({ ecommerce }) => {
     navigate(`/perfil/${ecommerce.ecommerce_name}`);
   };
 
-  return (
+  return ( 
     <Card shadow="sm" padding="sm" radius="md" withBorder style={{ marginTop: '50px', width: '300px', height: '350px' }}>
       <Card.Section>
         <Center>
