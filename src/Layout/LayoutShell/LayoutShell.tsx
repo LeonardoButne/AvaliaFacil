@@ -1,29 +1,31 @@
-import { AppShell, Burger, Group, ScrollArea, Skeleton, UnstyledButton } from "@mantine/core"
-import { RoutesComponent } from "../../Routes";
-import { useDisclosure } from "@mantine/hooks";
-import { Navbar } from "../Navbar/Navbar";
-import { Footer } from "../Footer/Footer";
-import Login from "../../Pages/Login";
+import { AppShell, Group, rem, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import Navbar from '../Navbar/Navbar';
+import Home from '../../Pages/Home';
+import Footer from '../Footer/Footer';
 
-export default function LayoutShell() {
+export function LayoutShell() {
   const [opened, { toggle }] = useDisclosure();
 
   return (
     <AppShell
-      header={{ height: 20 }}
-      padding="sm"
-    >
+  padding={0}
+  header={{ height: 57 }}
+  
+>
       <AppShell.Header>
-          <Navbar/>
+        <Navbar/>
       </AppShell.Header>
-      
-      <AppShell.Main>
-        <RoutesComponent/>
-      </AppShell.Main>
 
-      <AppShell.Section>
+      <AppShell.Main>
+        <Home />
+      </AppShell.Main>
+        
         <Footer/>
-      </AppShell.Section>
+      
+    
     </AppShell>
   );
 }
+
+export default LayoutShell

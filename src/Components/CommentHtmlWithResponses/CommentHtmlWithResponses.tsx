@@ -43,7 +43,7 @@ const CommentHtmlWithResponses: React.FC<CommentHtmlWithResponsesProps> = ({
   };
 
   return (
-    <ScrollArea h={200} mb="lg">
+    <ScrollArea h={600} mb="lg" style={{ border: '2px solid #333'}}>
       <Group>
         <Avatar src={avatarUrl} size={50} radius="xl" />
         <div>

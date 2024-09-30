@@ -1,0 +1,7 @@
+/* Exemplo de CSS */
+.homeContainer {
+    width: 100%;  /* Ocupa 100% da largura */
+    margin: 0;    /* Remove qualquer margem */
+    padding: 0;   /* Remove qualquer padding */
+  }
+  

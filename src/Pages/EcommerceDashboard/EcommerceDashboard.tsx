@@ -201,7 +201,7 @@ const EcommerceDashboard: React.FC = () => {
             </form>
           </Card>
 
-          <ScrollArea h={800}>
+          <ScrollArea h={1200}>
             <Title order={2}>Comentários</Title>
             {comentarios.map((comentario, index) => (
               <CommentHtmlWithResponses

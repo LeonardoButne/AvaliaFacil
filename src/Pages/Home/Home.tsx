@@ -1,13 +1,12 @@
-// EcommerceData.tsx
 import React from 'react';
 import { getDatabase, ref, onValue, DataSnapshot } from 'firebase/database';
-import { Grid, Container } from '@mantine/core';
+import { Grid, Container, Skeleton } from '@mantine/core';
 import Spinner from '../../Components/Spinner/Spinner.tsx';
 import CardEcommerce from '../../Components/CardEcommerce/CardEcommerce.tsx';
 import { getApps, initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../../Config/FirebaseConfig.ts';
-
-
+import HeroImageBackground from '../../Layout/HeroHeader/HeroimageBackground.tsx';
+import { FaqWithImage } from '../../Layout/FaqWithImage/FaqWithImage.tsx';
 
 interface Ecommerce {
   id: string;
@@ -27,61 +26,70 @@ interface Ecommerce {
 
 const EcommerceData: React.FC = () => {
 
-  // Initialize Firebase app
   if (!getApps().length) {
     initializeApp(firebaseConfig);
   }
 
-  
-  // Get a reference to the database
   const db = getDatabase();
-
   const [ecommerces, setEcommerces] = React.useState<Ecommerce[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    // Access the "feedbackAqui/ecommerces" node within the database
     const ecommerceRef = ref(db, "feedbackAqui/ecommerces");
-  
+
     const unsubscribe = onValue(ecommerceRef, (snapshot: DataSnapshot) => {
       const data = snapshot.val();
-      console.log('Data from Firebase:', data); // Log data received from Firebase
+      console.log('Data from Firebase:', data);
 
       if (data) {
-        const dataArray: Ecommerce[] = Object.keys(data).map((key) => {
-          const ecommerce = {
-            ...data[key],
-            id: key, // Adicione o ID do e-commerce
-          };
-          return ecommerce;
-        });
+        const dataArray: Ecommerce[] = Object.keys(data).map((key) => ({
+          ...data[key],
+          id: key,
+        }));
         setEcommerces(dataArray);
       } else {
-        console.log('No data available');
         setEcommerces([]);
       }
+      
+      setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [db]);
 
-  console.log('Ecommerces state:', ecommerces); // Log the ecommerces state
+  console.log('Ecommerces state:', ecommerces);
 
   return (
-    <Container>
-      <Grid>
-        {ecommerces.length > 0 ? (
+    <Container 
+      fluid // Faz o container ocupar 100% da largura
+      style={{ padding: 0 }} // Remove o padding do container
+    >
+      <HeroImageBackground />
+
+      <Grid 
+        gutter={0} // Remove o espaço entre colunas
+        justify="center" // Centraliza o conteúdo dentro da Grid
+      >
+        {loading ? (
+          <Grid.Col span={12}>
+            <Skeleton height={200} />
+            <Skeleton height={200} mt="sm" />
+            <Skeleton height={200} mt="sm" />
+          </Grid.Col>
+        ) : ecommerces.length > 0 ? (
           ecommerces.map((ecommerce) => (
-            <Grid.Col key={ecommerce.id} span={4} >
+            <Grid.Col key={ecommerce.id} span={3}>
               <CardEcommerce ecommerce={ecommerce} />
             </Grid.Col>
           ))
         ) : (
-        
+          <Grid.Col span={8}>
             <Spinner />
-         
+          </Grid.Col>
         )}
       </Grid>
+
+      <FaqWithImage />
     </Container>
   );
 };
