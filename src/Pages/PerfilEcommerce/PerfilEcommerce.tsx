@@ -3,7 +3,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/database';
 import { useNavigate } from 'react-router-dom';
-import { Container, Card, Grid, Text, Title, Group, Button, Textarea, Center, Paper, ScrollArea, Avatar, Box, LoadingOverlay } from '@mantine/core'; // Importe ScrollArea do Mantine
+import { Container, Card, Grid, Text, Title, Group, Button, Textarea, Center, ScrollArea, Avatar, Box, LoadingOverlay } from '@mantine/core'; // Importe ScrollArea do Mantine
 import { CommentHtml } from '../../Components/CommentHtml/CommentHtml';
 import classes from './PerfilEcommerce.module.css';
 import { firebaseConfig } from '../../Config/FirebaseConfig';

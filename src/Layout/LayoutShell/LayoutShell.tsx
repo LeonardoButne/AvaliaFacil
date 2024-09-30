@@ -1,11 +1,9 @@
-import { AppShell, Group, rem, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { AppShell } from '@mantine/core';
 import Navbar from '../Navbar/Navbar';
 import Home from '../../Pages/Home';
 import Footer from '../Footer/Footer';
 
 export function LayoutShell() {
-  const [opened, { toggle }] = useDisclosure();
 
   return (
     <AppShell
